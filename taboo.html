@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taboo Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .card-area {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #typing {
+            margin: 5px 10px;
+            min-height: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        #team-scores {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        #team-a-score {
+            color: #007bff;
+        }
+        
+        #timer {
+            color: #dc3545;
+            font-size: 24px;
+        }
+        
+        #team-b-score {
+            color: #28a745;
+        }
+        
+        #current-word {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #007bff;
+            box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+        }
+        
+        #forbidden-words {
+            text-align: center;
+            font-size: 16px;
+            color: #dc3545;
+            margin: 15px 0;
+            min-height: 40px;
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 10px;
+        }
+        
+        #current-player {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        #game-instructions {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre-line;
+        }
+        
+        #game-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        hr {
+            margin: 10px 0;
+            border-color: #ddd;
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .demo-message {
+            color: #666;
+            margin: 2px 0;
+        }
+        
+        .correct-guess {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .taboo-violation {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Typing indicator -->
+    <div id="typing">Player typing...</div>
+    
+    <!-- Main game container -->
+    <div class="game-container">
+        <!-- Game header with scores and timer -->
+        <div class="game-header">
+            <div id="team-scores">
+                <span id="team-a-score">Team A: 3</span>
+                <span id="timer" class="pulse">45</span>
+                <span id="team-b-score">Team B: 2</span>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <!-- Card area -->
+        <div class="card-area">
+            <div id="current-word">AUTOMOBILE</div>
+            <div id="forbidden-words">Don't say: CAR • VEHICLE • DRIVE • TRANSPORTATION • WHEELS</div>
+            <div id="current-player">Sarah is describing (Team A's turn)</div>
+        </div>
+        
+        <!-- Game instructions -->
+        <div id="game-instructions">🎯 TABOO RULES:
+• Describe the word without using the forbidden words
+• Your team guesses the word
+• Type 'PASS' to skip a word
+• Type 'CORRECT' when your team guesses right
+• Other team can type 'TABOO' if you use a forbidden words</div>
+        
+        <!-- Game messages/chat -->
+        <div id="game-messages">
+            <div class="demo-message">[Game] Round 3 started!</div>
+            <div class="demo-message">Sarah: It's something you use to get around...</div>
+            <div class="demo-message">Mike: Bus?</div>
+            <div class="demo-message">Sarah: No, it's smaller, you own it personally...</div>
+            <div class="demo-message">Lisa: Bicycle?</div>
+            <div class="demo-message">Sarah: No, it has an engine and four...</div>
+            <div class="taboo-violation">[TABOO!] Team B caught forbidden word usage!</div>
+            <div class="demo-message">[Game] New word coming up...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Demo interactivity
+        let timer = 45;
+        let teamAScore = 3;
+        let teamBScore = 2;
+        
+        // Simulate timer countdown
+        setInterval(() => {
+            timer--;
+            if (timer <= 0) timer = 60;
+            document.getElementById('timer').textContent = timer;
+            
+            // Change color based on time
+            const timerEl = document.getElementById('timer');
+            if (timer <= 10) {
+                timerEl.style.color = '#dc3545';
+                timerEl.classList.add('pulse');
+            } else {
+                timerEl.style.color = '#ffc107';
+                timerEl.classList.remove('pulse');
+            }
+        }, 1000);
+        
+        // Simulate new words
+        const words = [
+            {word: "AUTOMOBILE", forbidden: "Don't say: CAR • VEHICLE • DRIVE • TRANSPORTATION • WHEELS"},
+            {word: "ELEPHANT", forbidden: "Don't say: ANIMAL • TRUNK • BIG • GRAY • AFRICA"},
+            {word: "PIZZA", forbidden: "Don't say: FOOD • CHEESE • ITALIAN • ROUND • DELIVERY"},
+            {word: "SMARTPHONE", forbidden: "Don't say: PHONE • MOBILE • APPS • SCREEN • CALL"}
+        ];
+        
+        setInterval(() => {
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById('current-word').textContent = randomWord.word;
+            document.getElementById('forbidden-words').textContent = randomWord.forbidden;
+        }, 15000);
+        
+        // Click interactions
+        document.getElementById('current-word').addEventListener('click', function() {
+            this.style.backgroundColor = '#d4edda';
+            setTimeout(() => {
+                this.style.backgroundColor = '#f8f9fa';
+            }, 1000);
+        });
+        
+        console.log('Taboo Game Preview Loaded');
+    </script>
+</body>
+</html>
