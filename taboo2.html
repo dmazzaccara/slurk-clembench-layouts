@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Room</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: .25rem;
+            height: 100vh !important;
+            margin: 0px 15px;
+            padding: 20px;
+        }
+        
+        time:before {
+            content: '';
+        }
+        
+        #image-area {
+            margin: 0 auto;
+        }
+        
+        #typing {
+            margin: 5px 10px;
+            min-height: 20px;
+        }
+        
+        #instr_title {
+            min-height: 20px;
+        }
+        
+        #instr {
+            white-space: pre-wrap;
+        }
+        
+        #current-image {
+            min-width: 70vmin;
+            max-width: 90vmax;
+            object-fit: contain;
+            padding: 2%;
+        }
+        
+        /* Demo content styling */
+        .demo-content {
+            color: #6c757d;
+            font-style: italic;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Typing indicator area -->
+    <div id="typing">
+        <span class="demo-content">Typing indicator area...</span>
+    </div>
+    
+    <!-- Main card container -->
+    <div class="card">
+        <!-- Title section -->
+        <div style="color: #abb2b9;">
+            <b>
+                <lighter id="instr_title" style="min-height: 20px;">
+                    <span class="demo-content">Instruction Title Area</span>
+                </lighter>
+            </b>
+        </div>
+        
+        <!-- Horizontal rule -->
+        <hr style="margin: 2px; background-color: #abb2b9; opacity: .50;">
+        
+        <!-- Instructions area -->
+        <div id="instr" style="white-space: pre-wrap;">
+            <span class="demo-content">Instructions or content would appear here.
+This area supports pre-formatted text with line breaks.</span>
+        </div>
+        
+        <!-- Image area -->
+        <div id="image-area">
+            <img id="current-image" 
+                 style="min-width: 70vmin; max-width: 90vmax; object-fit: contain; padding: 2%;"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f8f9fa' stroke='%23dee2e6' stroke-width='2'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23868e96' font-family='sans-serif' font-size='14'%3EImage placeholder%3C/text%3E%3C/svg%3E"
+                 alt="Current image placeholder">
+        </div>
+    </div>
+    
+    <script>
+        // Demo functionality based on the scripts configuration
+        console.log('JSON Layout Preview Loaded');
+        console.log('Available script handlers:', {
+            'incoming-text': 'markdown',
+            'incoming-image': 'display-image', 
+            'submit-message': 'send-message',
+            'print-history': ['attribute-history', 'markdown-history'],
+            'typing-users': 'typing-users'
+        });
+        
+        // Simulate some interactivity
+        document.getElementById('typing').addEventListener('click', function() {
+            this.innerHTML = '<span style="color: #28a745;">Someone is typing...</span>';
+            setTimeout(() => {
+                this.innerHTML = '<span class="demo-content">Typing indicator area...</span>';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
